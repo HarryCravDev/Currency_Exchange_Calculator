@@ -193,6 +193,44 @@ module.hot.accept(reloadCSS);
 "use strict";
 
 require("../scss/main.scss");
+
+// DOM ELEMENTS
+var currencyEl_one = document.getElementById("currency-one");
+var amountEl_one = document.getElementById("amount-one");
+var currencyEl_two = document.getElementById("currency-two");
+var amountEl_two = document.getElementById("amount-two");
+var rateEl = document.getElementById("rate");
+var swap = document.getElementById("swap"); // Calculate Function
+
+function calculate() {
+  // Currency values
+  var currencyOne = currencyEl_one.value;
+  var currencyTwo = currencyEl_two.value; // Fetch exchange rates and display to UI
+
+  fetch("https://api.exchangeratesapi.io/latest?base=".concat(currencyOne)).then(function (res) {
+    return res.json();
+  }).then(function (data) {
+    // Get Rate
+    var rate = data.rates[currencyTwo]; // Display Rate
+
+    rateEl.innerHTML = "1 ".concat(currencyOne, " = ").concat(rate, " ").concat(currencyTwo); // Calculate amount
+
+    amountEl_two.value = (amountEl_one.value * rate).toFixed(2);
+  });
+} // Event Listeners
+
+
+amountEl_one.addEventListener("change", calculate);
+amountEl_one.addEventListener("input", calculate);
+amountEl_two.addEventListener("change", calculate);
+amountEl_two.addEventListener("input", calculate); // Swap Button - Change Exchange Rate
+
+swap.addEventListener("click", function () {
+  var temp = currencyEl_one.value;
+  currencyEl_one.value = currencyEl_two.value;
+  currencyEl_two.value = temp;
+  calculate();
+});
 },{"../scss/main.scss":"scss/main.scss"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -221,7 +259,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58768" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51682" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
